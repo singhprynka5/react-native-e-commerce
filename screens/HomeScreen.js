@@ -14,34 +14,19 @@ import { connect } from "react-redux";
 
 import { MonoText } from "../components/StyledText";
 import Product from "../components/Product";
-
-let products = [
-  {
-    id: "2",
-    title: "ES6 & Beyound",
-    author: "Kyle Simpson",
-    authorbio: "Kyle Simpson is a thorough pragmatist.",
-    publicationdate: "2015-5-5",
-    introduction:
-      "This book is about shaking up your sense of understanding by exposing you ",
-    cost: 35.99
-  },
-  {
-    id: "3",
-    title: "ng-book 2",
-    author: "Ari Lerner",
-    authorbio: "Full stack web developer and trainer.",
-    publicationdate: "2016-5-10",
-    introduction: "A complete refernce book on angular 2. ",
-    cost: 25.99
-  }
-];
+import { fetchProducts } from "../store/actions/productAction";
 
 class HomeScreen extends Component {
+  componentDidMount = () => {
+    this.props.fetchProducts();
+  };
+
   addItemsToCart = product => {
     this.props.addToCart(product);
   };
   render() {
+    const { products } = this.props;
+    console.log("products", products);
     return (
       <View style={styles.container}>
         <View style={styles.body}>
@@ -67,12 +52,14 @@ class HomeScreen extends Component {
 
 const mapStatetoProps = state => {
   return {
-    dummyReducers: state.dummyReducers
+    products: state.products
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    fetchProducts: () => dispatch(fetchProducts())
+  };
 };
 
 export default connect(mapStatetoProps, mapDispatchToProps)(HomeScreen);
